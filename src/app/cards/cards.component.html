@@ -1,0 +1,196 @@
+<!-- <div class="row"><button (click)="draw();">Draw</button><button>Four Filters</button>
+
+</div>
+Current Drawn -->
+<!-- 
+<label *ngIf="isDraw">In-Deck - {{deck.length}}</label> -->
+
+
+
+<div class="row">
+  <div class="col-md-5"></div>
+  <div class="col-md-6">
+    <div class="row">
+      <div class="col-md-12">
+        Select Suit
+        <div *ngFor="let s of Suit">
+          <input type="checkbox" [checked]="s.isClicked" (click)="selectedSuit(s,$event)">&nbsp;{{s.type}}
+        </div>
+      </div>
+      <div class="col-md-12" *ngIf="no_cards_inhand.length > 0">
+        <label>No Of Cards in Hand</label>
+        <select>
+          <option selected *ngFor="let n of no_cards_inhand">{{n}}</option>
+        </select>
+      </div>
+
+      <div class="col-md-12" *ngIf="no_cards_inhand.length > 0">
+        <label> Min Card value</label>
+        <select (change)="min_selection($event.target.value);">
+          <option value="">-Select</option>
+          <option *ngFor="let min of max_min_array" value="{{min}}">{{min}}</option>
+        </select>
+        <br>
+
+      </div>
+      <div class="col-md-12" *ngIf="no_cards_inhand.length > 0">
+        <label>Max Card value</label>
+        <select (change)="max_selection($event.target.value);">
+          <option value="">-Select</option>
+          <option *ngFor="let max of max_min_array" value="{{max}}">{{max}}</option>
+        </select>
+      </div>
+      <button class="btn btn-md btn-success" class="btn btn-md btn-info" (click)="getCards()">
+        Get Cards</button>
+    </div>
+
+  </div>
+
+</div>
+<!-- <div class="row">
+  <div class="col-md-12" style="text-align: center">
+      <button  class="btn btn-md btn-success" class="btn btn-md btn-info" (click)="getCards()">
+          Get Cards</button>
+  </div>
+</div> -->
+<br>
+<div class="row">
+  <div class="col-md-12">
+    <div>
+      <span style="margin-left: 40px" *ngIf="FinalCards.length>0">Available cards:{{FinalCards.length}}</span>
+      <ul class="card-list">
+        <li *ngFor="let r of FinalCards">
+          <div class="card {{r.color}}" title="{{r.value}}">
+            <div class="letter">{{r.value}}</div>
+            <div class="suit" [innerHtml]="r.icon | safe:'html'"></div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<br>
+<div class="row" *ngIf="viewDraw" style="text-align: center">
+  <div class="col-md-12">
+    <button class="btn btn-md btn-success" (click)="draw();">Draw</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <button class="btn btn-md btn-danger" (click)="reset();">Reset</button>
+  </div>
+</div>
+<div class="row" *ngIf="viewDraw">
+  <div class="col-md-3" *ngIf="selected_card">
+    <span style="float:right;">Latest Drawn card</span>
+    <br>
+    <ul class="card-list" style="float:right;">
+      <li>
+        <div class="card {{selected_card.color}}" title="{{selected_card.value}}">
+          <div class="letter">{{selected_card.value}}</div>
+          <div class="suit" [innerHtml]="selected_card.icon | safe:'html'"></div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-9">
+    <div *ngIf="reset_Deck.length > 0">
+      <span style="float:left;margin-left: 40px;">Picked cards:{{reset_Deck.length}}</span>
+      <br>
+      <ul class="card-list">
+        <li *ngFor="let r of reset_Deck">
+          <div class="card {{r.color}}" title="{{r.value}}">
+            <div class="letter">{{r.value}}</div>
+            <div class="suit" [innerHtml]="r.icon | safe:'html'"></div>
+          </div>
+        </li>
+      </ul>
+
+
+      <!-- <div   *ngFor="let r of reset_Deck" style="height:100px; width: 100px; background-color: rgb(19, 114, 24);display: inline-block;margin-right: 4px;">
+              {{r.type}} - {{r.value}} 
+          </div> -->
+    </div>
+  </div>
+</div>
+
+<!-- <div class="row">
+ <div class="col-md-4">
+    <div class="col-md-12">
+      Select Suit
+        <div *ngFor="let s of Suit">
+          <input type="checkbox" [checked]="s.isClicked" (click)="selectedSuit(s,$event)">{{s.type}}
+        </div>
+      </div>
+      <div class="col-md-12" *ngIf="no_cards_inhand.length > 0">
+        <label>No Of Cards in Hand</label>
+        <select>
+          <option selected disabled *ngFor="let n of no_cards_inhand">{{n}}</option>
+        </select>
+      </div>
+      <div class="col-md-12" *ngIf="no_cards_inhand.length > 0"> 
+        <label>Max Card value</label>
+        <select (change)="max_selection($event.target.value);">
+          <option value="">-Select</option>
+          <option *ngFor="let max of max_min_array" value="{{max}}">{{max}}</option>
+        </select>
+      </div>
+      <div class="col-md-12" *ngIf="no_cards_inhand.length > 0">
+        <label> Min Card value</label>
+        <select (change)="min_selection($event.target.value);">
+            <option value="">-Select</option>
+          <option *ngFor="let min of max_min_array" value="{{min}}">{{min}}</option>
+        </select>
+      </div>
+      <button  class="btn btn-md btn-success" class="btn btn-md btn-info" (click)="getCards()">
+         Get Cards</button>
+ </div>
+ <div class="col-md-8" *ngIf="viewDraw">
+    <div class="row">
+      <div class="col-md-2">
+          <button class="btn btn-md btn-success" (click)="draw();">Draw</button>
+          <ul class="card-list" *ngIf="selected_card" >
+              <li>
+                <div class="card {{selected_card.color}}" title="{{selected_card.value}}">
+                  <div class="letter">{{selected_card.value}}</div>
+                  <div class="suit" [innerHtml]="selected_card.icon | safe:'html'"></div>
+                </div>
+              </li> 
+            </ul>
+    
+        
+      </div>
+      <div class="col-md-10">
+
+
+          <ul class="card-list">
+              <li *ngFor="let r of FinalCards">
+                <div class="card {{r.color}}" title="{{r.value}}">
+                  <div class="letter">{{r.value}}</div>
+                  <div class="suit" [innerHtml]="r.icon | safe:'html'"></div>
+                </div>
+              </li> 
+            </ul>
+            
+      </div>    
+  </div>
+  <div class="row">
+    <br/>
+  <div  *ngIf="reset_Deck.length > 0"> 
+      PICKED CARDS 
+      <ul class="card-list">
+          <li *ngFor="let r of reset_Deck">
+            <div class="card {{r.color}}" title="{{r.value}}">
+              <div class="letter">{{r.value}}</div>
+              <div class="suit" [innerHtml]="r.icon | safe:'html'"></div>
+            </div>
+          </li> 
+        </ul>
+
+
+    
+ </div>
+</div> 
+ 
+</div> -->
+
+
+<!-- <div *ngIf="possible_cards.length > 0 && min > 0 && max >0">
+  <label>{{possible_cards.length}}</label>
+</div> -->
